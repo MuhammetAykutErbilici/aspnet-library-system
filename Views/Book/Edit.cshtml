@@ -1,0 +1,91 @@
+@model AspKutuphane.Models.Book
+
+@{
+    ViewData["Title"] = "Kitap Güncelle";
+}
+
+<style>
+    .bg-image-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/1.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: -1;
+    }
+
+    .edit-card {
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        border: none;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+    }
+</style>
+
+<div class="bg-image-overlay"></div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 mb-5">
+            <div class="card edit-card shadow-lg">
+                <div class="card-header bg-warning text-dark fw-bold text-center py-3" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                    <h4 class="mb-0">⚙️ Kitap Düzenleme Paneli</h4>
+                </div>
+                <div class="card-body p-4">
+                    
+                    <form asp-controller="Book" asp-action="Edit" method="post" enctype="multipart/form-data">
+                        
+                        <!-- Gizli Alanlar -->
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="Image" />
+                        <input type="hidden" asp-for="IsBorrowed" />
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">📚 Kitap Adı</label>
+                            <input type="text" asp-for="Title" class="form-control rounded-3" required />
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-dark">🖼️ Mevcut Kitap Kapak Resmi</label>
+                            <div class="mb-3">
+                                @if (!string.IsNullOrEmpty(Model.Image))
+                                {
+                                    <img src="~/images/@Model.Image" class="img-thumbnail shadow-sm" style="max-height: 180px; object-fit: contain;" />
+                                }
+                                else
+                                {
+                                    <div class="p-3 bg-light rounded text-muted small">Mevcut resim bulunmuyor.</div>
+                                }
+                            </div>
+                            <label class="form-label fw-bold text-dark">🔄 Yeni Resim Yükle (İsteğe Bağlı)</label>
+                            <input type="file" name="imageFile" class="form-control rounded-3" accept="image/*" />
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">Geri Dön</a>
+                            <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">Değişiklikleri Kaydet</button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <!-- SİLME İŞLEMİ -->
+                    <div class="p-3 rounded-3 border border-danger-subtle bg-danger-subtle bg-opacity-10">
+                        <h5 class="text-danger fw-bold">⚠️ Bu Kitabı Arşivden Sil</h5>
+                        <p class="small text-muted mb-3">Kitap silindiğinde kütüphane veri tabanından tamamen kaldırılacaktır. Bu işlem geri alınamaz.</p>
+                        
+                        <form asp-controller="Book" asp-action="Delete" method="post" onsubmit="return confirm('Bu kitabı kalıcı olarak silmek istediğinize emin misiniz?');">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm">Kitabı Kalıcı Olarak Sil</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

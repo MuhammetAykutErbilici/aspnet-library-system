@@ -1,0 +1,120 @@
+@model IEnumerable<AspKutuphane.Models.Student>
+
+    @{
+    ViewData["Title"] = "Öğrenci Listesi";
+    var activeUserEmail = Context.Request.Cookies["ActiveUserEmail"];
+    }
+
+    <style>
+        /* 1. Arka plan katmanı */
+        .bg-image-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                url('/images/1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1;
+        }
+
+        /* 2. BEYAZ KART TASARIMI */
+        .student-horizontal-card {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            border: none;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .student-horizontal-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .profile-icon-container {
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 130px;
+            border-right: 1px solid #eee;
+            color: #0d6efd;
+        }
+
+        .student-name {
+            color: #212529;
+            font-weight: 700;
+        }
+    </style>
+
+    <div class="bg-image-overlay"></div>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-white fw-bold mb-0">👥 Kayıtlı Öğrenciler</h2>
+            <span class="badge bg-light text-dark px-3 py-2 shadow-sm fw-bold">
+                Toplam: @(Model?.Count() ?? 0) Üye
+            </span>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+        <div class="alert alert-light border-0 shadow-sm text-center p-5">
+            <i class="bi bi-people fs-1 d-block mb-3 text-muted"></i>
+            Henüz kayıtlı öğrenci bulunmamaktadır.
+        </div>
+        }
+        else
+        {
+        <div class="row">
+            @foreach (var item in Model)
+            {
+            <div class="col-12 mb-3">
+                <div class="student-horizontal-card shadow-sm">
+                    <div class="row g-0 align-items-center">
+                        @* SOL TARAF: İkon Alanı *@
+                        <div class="col-md-1 profile-icon-container">
+                            <i class="bi bi-person-bounding-box" style="font-size: 2.5rem;"></i>
+                        </div>
+
+                        @* SAĞ TARAF: Bilgiler *@
+                        <div class="col-md-11">
+                            <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="student-name mb-1">@item.StudentName</h5>
+                                    <p class="text-muted mb-2 small">
+                                        <i class="bi bi-envelope-at me-1"></i> @item.StudentMail
+                                    </p>
+                                    <span
+                                        class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle px-3">
+                                        @item.Department
+                                    </span>
+                                </div>
+
+                                <div class="text-end">
+                                    <div class="mb-2">
+                                        <small class="text-secondary d-block">Emanet Kitap Sayısı</small>
+                                        <span class="fw-bold fs-4 text-dark">
+                                            @(item.BorrowedBooks?.Count ?? 0)
+                                        </span>
+                                    </div>
+                                    @* Modelindeki StudentId'ye göre yönlendirme güncellendi *@
+                                    <a asp-action="Details" asp-route-id="@item.StudentId"
+                                        class="btn btn-outline-dark btn-sm rounded-pill px-4 fw-bold">
+                                        İncele
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        }
+    </div>

@@ -1,0 +1,101 @@
+@model AspKutuphane.Models.Student
+
+@{
+    ViewData["Title"] = "Hesap Ayarları";
+}
+
+<style>
+    /* Kütüphane arka plan görsel katmanı */
+    .bg-image-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/1.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: -1;
+    }
+
+    /* Modern buzlu cam kart tasarımı */
+    .settings-card {
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        border: none;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+    }
+</style>
+
+<div class="bg-image-overlay"></div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 mb-5">
+            
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success border-0 shadow-sm rounded-3">
+                    ✔ @TempData["SuccessMessage"]
+                </div>
+            }
+
+            <div class="card settings-card shadow-lg">
+                <div class="card-header bg-dark text-white fw-bold text-center py-3" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                    <h4 class="mb-0">⚙️ Öğrenci Hesap Ayarları</h4>
+                </div>
+                <div class="card-body p-4">
+                    
+                    <form asp-controller="Account" asp-action="Settings" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+                        
+                        <input type="hidden" asp-for="StudentId" />
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">📧 Öğrenci E-Posta (Değiştirilemez)</label>
+                            <input type="email" asp-for="StudentMail" class="form-control rounded-3 bg-light" readonly />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">👤 Adınız Soyadınız</label>
+                            <input type="text" asp-for="StudentName" class="form-control rounded-3" required />
+                        </div>
+
+                        <hr class="my-4">
+                        <h5 class="text-secondary fw-bold mb-3">🔒 Şifre Değiştir</h5>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">🔑 Mevcut Şifre</label>
+                            <input type="password" name="currentPassword" class="form-control rounded-3" placeholder="Değişiklikleri kaydetmek için girmek zorunludur" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">🆕 Yeni Şifre (İsteğe Bağlı)</label>
+                            <input type="password" name="newPassword" class="form-control rounded-3" placeholder="Şifrenizi değiştirmek istemiyorsanız boş bırakın" />
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-4">
+                            <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm">Ayarları Kaydet</button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="p-3 rounded-3 border border-danger-subtle bg-danger-subtle bg-opacity-10">
+                        <h5 class="text-danger fw-bold">⚠️ Hesabımı Kalıcı Olarak Sil</h5>
+                        <p class="small text-muted mb-3">Hesabınızı sildiğinizde kütüphane sistemindeki üyeliğiniz, profiliniz ve üzerinizdeki aktif emanet kayıtları tamamen yok edilecektir.</p>
+                        
+                        <form asp-controller="Account" asp-action="DeleteAccount" method="post" onsubmit="return confirm('Hesabınızı kalıcı olarak silmek istediğinize emin misiniz? Bu işlem kesinlikle geri alınamaz!');">
+                            
+                            <input type="hidden" name="id" value="@Model.StudentId" />
+                            
+                            <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm">Hesabımı Yok Et</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

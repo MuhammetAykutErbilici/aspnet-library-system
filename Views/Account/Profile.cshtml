@@ -1,0 +1,66 @@
+@model AspKutuphane.Models.User
+
+<style>
+    body {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/images/1.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
+
+    .profile-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        border: none;
+    }
+</style>
+
+<div class="container mt-5 pt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card profile-card shadow-lg p-4">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                        style="width: 80px; height: 80px; font-size: 2rem;">
+                        @Model.FullName.Substring(0,1).ToUpper()
+                    </div>
+                    <div class="ms-4">
+                        <h2 class="fw-bold mb-0">@Model.FullName</h2>
+                        <span class="badge bg-info text-dark">@Model.Role</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="text-primary border-bottom pb-2">Hesap Bilgileri</h5>
+                        <p><strong>E-posta:</strong> @Model.Email</p>
+                        <p><strong>Durum:</strong> Aktif Üye</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-primary border-bottom pb-2">Kütüphane Bilgileri</h5>
+                        @if (ViewBag.Student != null)
+                        {
+                        <p><strong>Bölüm:</strong> @ViewBag.Student.Department</p>
+                        <p><strong>Okunan Kitap Sayısı:</strong> @ViewBag.Student.BorrowedBooks.Count</p>
+                        }
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <h5 class="text-primary border-bottom pb-2">Şu An Üzerindeki Kitaplar</h5>
+                    @if (ViewBag.Student?.BorrowedBooks != null && ViewBag.Student.BorrowedBooks.Count > 0)
+                    {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var book in ViewBag.Student.BorrowedBooks)
+                        {
+                        <li class="list-group-item bg-transparent">📖 @book.Title</li>
+                        }
+                    </ul>
+                    }
+                    else
+                    {
+                    <p class="text-muted italic">Henüz ödünç alınmış bir kitap bulunmuyor.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

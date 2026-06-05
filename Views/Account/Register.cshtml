@@ -1,0 +1,97 @@
+@model AspKutuphane.Models.User
+
+@{
+ViewData["Title"] = "Üye Ol";
+}
+
+<style>
+    /* 1. Sayfada kaydırma çubuğunu gizler ve taşmaları önler */
+    html,
+    body {
+        overflow: hidden;
+        height: 100%;
+        margin: 0;
+    }
+
+    /* 2. Arka plan katmanı */
+    .bg-image-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+            url('/images/1.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: saturate(1.1);
+        z-index: -1;
+    }
+
+    /* 3. Tamamen beyaz ve saydam olmayan kayıt kartı */
+    .register-card {
+        background-color: #ffffff !important;
+        /* Saydamlık tamamen kaldırıldı */
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        border: none;
+        opacity: 1 !important;
+    }
+
+    /* Input kutularının arka planı */
+    .form-control {
+        background-color: #f8f9fa !important;
+        border: 1px solid #dee2e6;
+    }
+</style>
+
+<!-- Arka plan katmanı -->
+<div class="bg-image-overlay"></div>
+
+<div class="container">
+    @* Navbar ile arasına boşluk bırakmak için mt-5 ve pt-5 kullandık *@
+    <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+        <div class="col-md-5 mt-4">
+            <div class="card register-card p-4 shadow-lg">
+                <div class="text-center mb-4">
+                    <h3 class="text-dark fw-bold">Kütüphane Üyeliği</h3>
+                    <div class="bg-primary mx-auto mb-3" style="height: 3px; width: 60px; border-radius: 2px;"></div>
+                </div>
+
+                <form asp-action="Register" method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-dark small fw-bold">Ad Soyad</label>
+                        <input asp-for="FullName" class="form-control bg-light" placeholder="Adınızı giriniz"
+                            required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-dark small fw-bold">E-posta</label>
+                        <input asp-for="Email" type="email" class="form-control bg-light" placeholder="ornek@mail.com"
+                            required />
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-dark small fw-bold">Şifre</label>
+                        <input asp-for="Password" type="password" class="form-control bg-light"
+                            placeholder="Şifrenizi belirleyin" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm">
+                        Kaydet ve Üye Ol
+                    </button>
+
+                    <div class="text-center mt-3">
+                        <a asp-controller="Home" asp-action="Index" class="text-decoration-none small text-muted">
+                            Vazgeç ve Geri Dön
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

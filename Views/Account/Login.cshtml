@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<style>
+    html, body { overflow: hidden; height: 100%; margin: 0; }
+    .bg-image-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/images/1.jpg');
+        background-size: cover; background-position: center; filter: saturate(1.1); z-index: -1;
+    }
+    .login-card {
+        background-color: #ffffff !important; border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); border: none;
+    }
+</style>
+
+<div class="bg-image-overlay"></div>
+
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="height: 80vh; padding-bottom: 100px;">
+        <div class="col-md-5">
+            <div class="card login-card p-4 shadow-lg">
+                <div class="text-center mb-4">
+                    <h3 class="text-dark fw-bold">Giriş Yap</h3>
+                    <div class="bg-primary mx-auto mb-3" style="height: 3px; width: 60px; border-radius: 2px;"></div>
+                </div>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger py-2 small text-center mb-3">@ViewBag.Error</div>
+                }
+
+                <form asp-action="Login" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label class="form-label text-dark small fw-bold">E-posta</label>
+                        <input name="email" type="email" class="form-control bg-light" placeholder="ornek@mail.com" required />
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label text-dark small fw-bold">Şifre</label>
+                        <input name="password" type="password" class="form-control bg-light" placeholder="******" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm">Giriş Yap</button>
+                    <div class="text-center mt-3">
+                        <span class="small text-muted">Hesabın yok mu?</span>
+                        <a asp-action="Register" class="text-decoration-none small fw-bold">Üye Ol</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

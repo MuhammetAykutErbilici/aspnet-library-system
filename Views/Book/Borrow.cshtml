@@ -1,0 +1,45 @@
+@model AspKutuphane.Models.Book
+@{
+    ViewData["Title"] = "Ödünç Alma Onayı";
+}
+
+<style>
+    .bg-image-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/images/1.jpg');
+        background-size: cover; background-position: center; z-index: -1;
+    }
+    .confirm-card {
+        background: rgba(255, 255, 255, 0.95); border-radius: 20px; backdrop-filter: blur(10px);
+    }
+</style>
+
+<div class="bg-image-overlay"></div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card confirm-card shadow-lg p-4 text-center">
+                <h2 class="text-dark fw-bold mb-4">Kitap Ödünç Alma</h2>
+                
+                <div class="mb-4">
+                    @if (!string.IsNullOrEmpty(Model.Image)) {
+                        <img src="~/images/@Model.Image" style="height: 200px; object-fit: contain;" class="mb-3">
+                    }
+                    <h3 class="text-primary">@Model.Title</h3>
+                    <p class="text-muted">Bu kitabı ödünç almak istediğinize emin misiniz?</p>
+                </div>
+
+                <form asp-action="BorrowConfirm" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg rounded-pill shadow">
+                            <i class="bi bi-check-lg"></i> Evet, Ödünç Al
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill">Vazgeç</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

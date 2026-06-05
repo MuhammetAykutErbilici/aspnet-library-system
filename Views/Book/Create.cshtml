@@ -1,0 +1,129 @@
+@model AspKutuphane.Models.Book
+
+@{
+    ViewData["Title"] = "Yeni Kitap Ekle";
+}
+
+<style>
+    /* 1. Sayfanın tamamında kaydırmayı engelle */
+    html, body {
+        overflow: hidden; /* Scroll bar'ı tamamen kaldırır */
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* 2. Arka plan katmanı */
+    .bg-image-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+            url('/images/1.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: -1;
+    }
+
+    /* 3. Orta Beyaz Kutu */
+    .create-card {
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        border: none;
+        padding: 30px 40px; /* İç boşluğu biraz daralttık ki sığsın */
+        backdrop-filter: blur(10px);
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #333;
+        font-size: 0.9rem;
+    }
+
+    .form-control, .form-select {
+        border-radius: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .btn-save {
+        background-color: #0d6efd;
+        border: none;
+        border-radius: 10px;
+        padding: 12px;
+        font-weight: bold;
+    }
+
+    .page-title {
+        font-weight: 800;
+        color: #212529;
+        margin-bottom: 25px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .page-title::after {
+        content: "";
+        position: absolute;
+        width: 50%;
+        height: 4px;
+        background-color: #0d6efd;
+        bottom: -8px;
+        left: 25%;
+        border-radius: 2px;
+    }
+</style>
+
+<div class="bg-image-overlay"></div>
+
+<div class="container-fluid">
+    @* Ekranı tam ortalamak için h-100 ve align-items-center *@
+    <div class="row justify-content-center align-items-center" style="height: 80vh;">
+        <div class="col-md-5 col-lg-4">
+            <div class="card create-card text-center shadow-lg">
+                
+                <h2 class="page-title">Kitap Ekle</h2>
+                
+                <form asp-action="Create" method="post" enctype="multipart/form-data" class="text-start mt-2">
+                    
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label">Kitap Adı</label>
+                        <input asp-for="Title" class="form-control form-control-sm" placeholder="Kitap ismini giriniz..." required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Kitap Kapak Resmi</label>
+                        <input type="file" name="imageFile" class="form-control form-control-sm" accept="image/*">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Kategori</label>
+                        <select class="form-select form-select-sm">
+                            <option selected>Seçiniz...</option>
+                            <option value="1">Tarih</option>
+                            <option value="2">Yazılım</option>
+                            <option value="3">Otomobil</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4 form-check">
+                        <input type="checkbox" class="form-check-input" id="isActive" asp-for="IsBorrowed">
+                        <label class="form-check-label text-dark small" for="isActive">Ödünç Verildi mi?</label>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-save shadow">
+                            <i class="bi bi-cloud-arrow-up me-2"></i>Kaydet
+                        </button>
+                        <a asp-action="Index" class="btn btn-link btn-sm text-decoration-none text-secondary">Vazgeç</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
